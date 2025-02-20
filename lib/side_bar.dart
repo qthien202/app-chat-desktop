@@ -1,5 +1,6 @@
 import 'package:app_chat_desktop/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class SideBar extends StatelessWidget {
   const SideBar({super.key});
@@ -9,10 +10,10 @@ class SideBar extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     List<Map<String, dynamic>> items = [
-      {"icon": Icons.message, "title": "Message"},
-      {"icon": Icons.contact_mail, "title": "Contact"},
-      {"icon": Icons.search, "title": "search"},
-      {"icon": Icons.settings, "title": "Settings"},
+      {"icon": PhosphorIconsFill.chatCircleText, "title": "Message"},
+      {"icon": PhosphorIconsFill.addressBook, "title": "Contact"},
+      {"icon": PhosphorIconsFill.magnifyingGlass, "title": "search"},
+      {"icon": PhosphorIconsFill.gearSix, "title": "Settings"},
     ];
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10),
@@ -37,7 +38,8 @@ class SideBar extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(vertical: 20),
                         child: IconButton(
                           onPressed: () {},
-                          icon: Icon(
+                          icon: PhosphorIcon(
+                            size: 30,
                             item["icon"],
                             color: Colors.white,
                           ),

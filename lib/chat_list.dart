@@ -1,5 +1,6 @@
 import 'package:app_chat_desktop/constants/app_data.dart';
 import 'package:app_chat_desktop/widgets/search_widet.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ChatList extends StatelessWidget {
@@ -8,8 +9,12 @@ class ChatList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      width: screenWidth * .22,
+      width: 350,
+      constraints: BoxConstraints(
+        minWidth: 350,
+      ),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(

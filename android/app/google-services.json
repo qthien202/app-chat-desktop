@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "42653846877",
+    "project_id": "tchat-df6e9",
+    "storage_bucket": "tchat-df6e9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:42653846877:android:33880b8fb3375e89b26cb4",
+        "android_client_info": {
+          "package_name": "com.example.app_chat_desktop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsh9MZ2rngNxNlvCEVSzQVrCr_fdKb7-M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

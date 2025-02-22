@@ -3,8 +3,8 @@ import 'package:app_chat_desktop/widgets/message_box_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-import 'widgets/chat_emoji_widget.dart';
-import 'widgets/chat_input_widget.dart';
+import '../../widgets/chat_emoji_widget.dart';
+import '../../widgets/chat_input_widget.dart';
 
 class ChatWindow extends StatelessWidget {
   const ChatWindow({super.key});

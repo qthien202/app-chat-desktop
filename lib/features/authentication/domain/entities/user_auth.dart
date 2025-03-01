@@ -19,4 +19,26 @@ class UserAuth extends Equatable {
   @override
   List<Object> get props =>
       [uuid, name, avatar, accessToken, idToken, refreshToken ?? ""];
+
+  factory UserAuth.fromJson(Map<String, dynamic> json) {
+    return UserAuth(
+      uuid: json['uuid'],
+      name: json['name'],
+      avatar: json['avatar'],
+      accessToken: json['accessToken'],
+      idToken: json['idToken'],
+      refreshToken: json['refreshToken'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uuid': uuid,
+      'name': name,
+      'avatar': avatar,
+      'accessToken': accessToken,
+      'idToken': idToken,
+      'refreshToken': refreshToken,
+    };
+  }
 }

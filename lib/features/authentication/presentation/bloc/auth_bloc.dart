@@ -1,40 +1,24 @@
-import 'package:app_chat_desktop/features/authentication/domain/usecases/register_usecase.dart';
+import 'package:app_chat_desktop/features/authentication/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:app_chat_desktop/features/authentication/presentation/bloc/auth_event.dart';
 import 'package:app_chat_desktop/features/authentication/presentation/bloc/auth_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/usecases/login_usecase.dart';
-
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final LoginUsecase loginUsecase;
-  final RegisterUsecase registerUsecase;
-
-  AuthBloc(this.loginUsecase, this.registerUsecase) : super(AuthInitial()) {
-    on<LoginEvent>(_onLogin);
-    on<RegisterEvent>(_onRegister);
+  final SignInWithGoogleUseCase signInWithGoogleUseCase;
+  AuthBloc({required this.signInWithGoogleUseCase}) : super(AuthInitial()) {
+    on<SignInWithGoogleEvent>((event, emit) => signInWithGoogle(event, emit));
   }
 
-  Future<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
+  Future<void> signInWithGoogle(
+      SignInWithGoogleEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-
     try {
-      final user = await loginUsecase(event.email, event.password);
-      emit(user != null
-          ? AuthAuthenticated(user.uid)
-          : AuthError("Login failed"));
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
-
-  Future<void> _onRegister(RegisterEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-
-    try {
-      final user = await registerUsecase(event.email, event.password);
-      emit(user != null
-          ? AuthAuthenticated(user.uid)
-          : AuthError("Register failed"));
+      final user = await signInWithGoogleUseCase();
+      if (user != null) {
+        emit(AuthAuthenticated(user));
+      } else {
+        emit(AuthError("Signin failed"));
+      }
     } catch (e) {
       emit(AuthError(e.toString()));
     }

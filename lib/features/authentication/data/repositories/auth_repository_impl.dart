@@ -1,6 +1,7 @@
+import 'package:app_chat_desktop/features/authentication/domain/entities/user_auth.dart';
+
 import '../../domain/repositories/auth_repository.dart';
 import '../data_sources/auth_remote_data_source.dart';
-import '../models/user_auth_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
@@ -8,14 +9,8 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<UserModel?> login(String email, String password) async {
-    final user = await remoteDataSource.login(email, password);
-    return user != null ? UserModel.fromFirebase(user) : null;
-  }
-
-  @override
-  Future<UserModel?> register(String email, String password) async {
-    final user = await remoteDataSource.register(email, password);
-    return user != null ? UserModel.fromFirebase(user) : null;
+  Future<UserAuth?> signInWithGoogle() async {
+    final userModel = await remoteDataSource.signInWithGoogle();
+    return userModel != null ? UserAuth.fromJson(userModel.toJson()) : null;
   }
 }

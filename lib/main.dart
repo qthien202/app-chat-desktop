@@ -1,3 +1,5 @@
+import 'package:app_chat_desktop/core/di.dart';
+import 'package:app_chat_desktop/features/authentication/presentation/bloc/auth_bloc.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:app_chat_desktop/firebase_options.dart';
 import 'package:app_chat_desktop/routes.dart';
@@ -10,7 +12,9 @@ import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  initializeDependencie();
+
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Khởi tạo Window Manager
   await windowManager.ensureInitialized();
   // await dotenv.load(fileName: ".env");
@@ -27,7 +31,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => ChatBloc())],
+      providers: [
+        BlocProvider(
+          create: (context) => sl<AuthBloc>(),
+        ),
+        BlocProvider(create: (context) => ChatBloc())
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         builder: (context, child) => ResponsiveBreakpoints.builder(

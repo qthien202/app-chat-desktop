@@ -4,6 +4,7 @@ import 'package:app_chat_desktop/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -12,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // Khởi tạo Window Manager
   await windowManager.ensureInitialized();
-
+  // await dotenv.load(fileName: ".env");
   // Đặt kích thước cửa sổ tối thiểu
   windowManager.setMinimumSize(
       const Size(600, 650)); // Min width = 547px, height tùy bạn

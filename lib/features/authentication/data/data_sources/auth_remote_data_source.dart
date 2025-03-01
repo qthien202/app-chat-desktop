@@ -1,60 +1,61 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
+
+import 'package:app_chat_desktop/enviroment/env.dart';
+import 'package:app_chat_desktop/features/authentication/data/models/user_auth_model.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_appauth/flutter_appauth.dart';
 
 abstract class AuthRemoteDataSource {
-  Future<User?>login(String email, String password);
-  Future<User?>register(String email, String password);
+  Future<UserAuthModel?> signInWithGoogle();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  FlutterAppAuth appAuth = FlutterAppAuth();
+  final String redirectUri = 'http://localhost';
+  final String discoveryUrl =
+      'https://accounts.google.com/.well-known/openid-configuration';
 
   @override
-  Future<User?> login(String email, String password) async {
+  Future<UserAuthModel?> signInWithGoogle() async {
+    // TODO: implement signInWithGoogle
     try {
-      final userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
+      final AuthorizationTokenResponse response =
+          await appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
+        Env.clientId,
+        redirectUri,
+        discoveryUrl: discoveryUrl,
+        scopes: ['openid', 'email', 'profile'],
+      ));
+      if (response.accessToken == null || response.idToken == null) {
         if (kDebugMode) {
-          print('No user found for that email.');
+          print('Google Sign-In failed');
         }
-      } else if (e.code == 'wrong-password') {
-        if (kDebugMode) {
-          print('Wrong password provided for that user.');
-        }
+        return null;
       }
-      return null;
-    }
-  }
-
-  @override
-  Future<User?> register(String email, String password) async {
-    try {
-      final  userCredential = await _auth.createUserWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        if (kDebugMode) {
-          print('The password provided is too weak.');
-        }
-      } else if (e.code == 'email-already-in-use') {
-        if (kDebugMode) {
-          print('The account already exists for that email.');
-        }
-      }
-      return null;
+      final Map<String, dynamic> idTokenPayload =
+          parseIdToken(response.idToken ?? "");
+      return UserAuthModel(
+          uuid: idTokenPayload['sub'],
+          name: idTokenPayload['name'],
+          avatar: idTokenPayload['picture'],
+          accessToken: response.accessToken ?? "",
+          idToken: response.idToken ?? "",
+          refreshToken: response.refreshToken);
     } catch (e) {
       if (kDebugMode) {
-        print(e);
+        print('Google Sign-In error: $e');
       }
       return null;
     }
   }
-} 
+
+  Map<String, dynamic> parseIdToken(String idToken) {
+    final parts = idToken.split('.');
+    if (parts.length != 3) {
+      throw Exception('Invalid ID token format');
+    }
+    final payload =
+        utf8.decode(base64Url.decode(base64Url.normalize(parts[1])));
+    return json.decode(payload);
+  }
+}

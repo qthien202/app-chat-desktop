@@ -1,4 +1,4 @@
-import 'package:app_chat_desktop/features/authentication/domain/entities/user.dart';
+import 'package:app_chat_desktop/features/authentication/domain/entities/user_auth.dart';
 
 import '../repositories/auth_repository.dart';
 

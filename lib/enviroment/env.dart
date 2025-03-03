@@ -6,4 +6,7 @@ part 'env.g.dart';
 abstract class Env {
   @EnviedField(varName: 'CLIENT_ID', obfuscate: true)
   static final String clientId = _Env.clientId;
+
+  @EnviedField(varName: 'CLIENT_SECRET', obfuscate: true)
+  static final String clientSecret = _Env.clientSecret;
 }

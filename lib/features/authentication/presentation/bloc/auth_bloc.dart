@@ -15,6 +15,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final user = await signInWithGoogleUseCase();
       if (user != null) {
+        print(">>>>>>>>>user: $user");
         emit(AuthAuthenticated(user));
       } else {
         emit(AuthError("Signin failed"));

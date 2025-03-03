@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'package:image/image.dart' as img;
+
 extension FileTypeChecker on String {
   /// Danh sách các định dạng hình ảnh phổ biến
   static final List<String> imageExtensions = [
@@ -39,6 +42,14 @@ extension FileTypeChecker on String {
 
   /// Kiểm tra có phải file ảnh không
   bool get isImage => imageExtensions.contains(extension.toLowerCase());
+
+  static bool isImageByte(Uint8List bytes) {
+    try {
+      return img.decodeImage(bytes) != null;
+    } catch (e) {
+      return false;
+    }
+  }
 
   /// Kiểm tra có phải file video không
   bool get isVideo => videoExtensions.contains(extension.toLowerCase());

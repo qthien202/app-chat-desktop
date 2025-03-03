@@ -5,6 +5,7 @@ import 'package:app_chat_desktop/firebase_options.dart';
 import 'package:app_chat_desktop/routes.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:responsive_framework/responsive_framework.dart';
@@ -39,6 +40,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ChatBloc())
       ],
       child: MaterialApp.router(
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {PointerDeviceKind.mouse},
+        ),
         debugShowCheckedModeBanner: false,
         builder: (context, child) => ResponsiveBreakpoints.builder(
           child: child!,

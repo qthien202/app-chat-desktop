@@ -10,6 +10,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../../../../widgets/chat_emoji_widget.dart';
 import '../../../../widgets/chat_input_widget.dart';
 
@@ -47,7 +48,7 @@ class ChatWindow extends StatelessWidget {
                   context.read<ChatBloc>().add(ToggleDropFileEvent(false));
                 },
                 child: DottedBorder(
-                  padding: EdgeInsets.all(10),
+                  // padding: EdgeInsets.all(10),
                   color: isDropping ? Colors.blue : Colors.transparent,
                   borderType: BorderType.RRect,
                   radius: const Radius.circular(8),
@@ -71,21 +72,34 @@ class ChatWindow extends StatelessWidget {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      border: Border(
-                                          bottom: BorderSide(
-                                              color: Colors.grey.shade200))),
-                                  child: Wrap(
-                                      children: state.files.map((file) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 5, vertical: 5),
-                                      child: contentDroppedWidget(file),
-                                    );
-                                  }).toList()),
-                                ),
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border(
+                                            bottom: BorderSide(
+                                                color: Colors.grey.shade200))),
+                                    child: SizedBox(
+                                      height: 100,
+                                      width: double.infinity,
+                                      child: ListView.separated(
+                                        physics:
+                                            AlwaysScrollableScrollPhysics(),
+                                        scrollDirection: Axis.horizontal,
+                                        separatorBuilder: (context, index) =>
+                                            const SizedBox(
+                                          width: 5,
+                                        ),
+                                        itemCount: state.files.length,
+                                        itemBuilder: (context, index) {
+                                          final file = state.files[index];
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 5, vertical: 5),
+                                            child: contentDroppedWidget(file),
+                                          );
+                                        },
+                                      ),
+                                    )),
                                 chatBottomAppBar(context)
                               ],
                             );
@@ -250,30 +264,30 @@ class ChatWindow extends StatelessWidget {
             // mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center, // Đặt align cho Row
             children: [
-              // Row(
-              //   crossAxisAlignment: CrossAxisAlignment.center,
-              //   children: [
-              //     GestureDetector(
-              //       onTap: () async {},
-              //       child: Visibility(
-              //         visible: false,
-              //         replacement: const PhosphorIcon(
-              //           PhosphorIconsRegular.smiley,
-              //           color: Colors.grey,
-              //           size: 33,
-              //         ),
-              //         child: const PhosphorIcon(
-              //           PhosphorIconsRegular.keyboard,
-              //           color: Colors.grey,
-              //           size: 33,
-              //         ),
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(
-              //   width: 10,
-              // ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () async {},
+                    child: const PhosphorIcon(
+                      PhosphorIconsRegular.smiley,
+                      color: Colors.grey,
+                      size: 33,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () async {},
+                    child: const PhosphorIcon(
+                      PhosphorIconsRegular.paperclip,
+                      color: Colors.grey,
+                      size: 33,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                width: 10,
+              ),
               Expanded(
                 flex: 2,
                 child: chatInput(
@@ -282,17 +296,20 @@ class ChatWindow extends StatelessWidget {
                   onTap: () {},
                 ),
               ),
+              const SizedBox(
+                width: 10,
+              ),
               GestureDetector(
                 onTap: () async {},
                 child: Container(
                   padding: const EdgeInsets.all(
                       8), // Thêm padding để làm cho nút đẹp hơn
-                  decoration: const BoxDecoration(
-                    color: Colors.blue,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade700,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
-                    Icons.arrow_forward_rounded,
+                    Icons.arrow_upward,
                     color: Colors.white,
                     size: 18,
                   ),

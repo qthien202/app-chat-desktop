@@ -1,5 +1,4 @@
 import 'package:desktop_drop/desktop_drop.dart';
-import 'package:image_picker/image_picker.dart';
 
 sealed class ChatEvent {
   ChatEvent();

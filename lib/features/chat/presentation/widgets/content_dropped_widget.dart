@@ -1,51 +1,103 @@
 import 'dart:io';
-
-import 'package:app_chat_desktop/utils/app_utils.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:app_chat_desktop/extension/file_type_checker.dart';
 
 Widget contentDroppedWidget(DropItem file) {
+  final Future<Uint8List?> fileBytesFuture = file.readAsBytes();
   return FutureBuilder<Uint8List?>(
-    future: file.readAsBytes(),
+    future: fileBytesFuture,
     builder: (context, snapshot) {
-      if (snapshot.hasData && FileTypeChecker.isImageByte(snapshot.data!)) {
-        return Image.memory(
-          height: 150,
-          width: 150,
-          snapshot.data!,
-          fit: BoxFit.cover,
-        );
+      // print(">>>>>>>>>>>>uint8List: ${snapshot.data}");
+      if (kIsWeb &&
+          snapshot.hasData &&
+          FileTypeChecker.isImageByte(snapshot.data!)) {
+        return imageWeb(snapshot.data!);
       }
-      if (!kIsWeb && file.path.isImage) {
-        return Image.file(
-          height: 150,
-          width: 150,
-          File(file.path),
-          fit: BoxFit.cover,
-        );
+
+      if (file.path.isNotEmpty && file.path.isImage) {
+        return imageDesktop(file);
       }
-      return Container(
-        height: 150,
-        width: 150,
-        color: Colors.grey.shade200,
+      return contentFile(file);
+    },
+  );
+}
+
+Widget contentFile(DropItem file) {
+  return Stack(
+    alignment: Alignment.topRight,
+    children: [
+      Container(
+        constraints: BoxConstraints(maxWidth: 150),
+        height: 50,
+        // width: 80,
+        decoration: BoxDecoration(
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(8),
+        ),
         padding: EdgeInsets.all(5),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          // mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.file_present,
+              Icons.description_outlined,
               size: 30,
-              color: Colors.blue,
+              color: Colors.white,
             ),
             const SizedBox(
-              height: 10,
+              width: 10,
             ),
-            Text(file.name)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    file.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            )
           ],
         ),
-      );
-    },
+      ),
+      Icon(Icons.cancel)
+    ],
+  );
+}
+
+Widget imageWeb(Uint8List imageByte) {
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(8),
+    child: Image.memory(
+      height: 80,
+      width: 80,
+      imageByte,
+      fit: BoxFit.cover,
+    ),
+  );
+}
+
+Widget imageDesktop(DropItem file) {
+  return Stack(
+    alignment: Alignment.topRight,
+    children: [
+      ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: Image.file(
+          height: 80,
+          width: 80,
+          File(file.path),
+          fit: BoxFit.cover,
+        ),
+      ),
+      Icon(
+        Icons.cancel,
+        color: Colors.black,
+      )
+    ],
   );
 }

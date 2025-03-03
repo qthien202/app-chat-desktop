@@ -8,6 +8,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   file_selector_windows
   firebase_auth
   firebase_core
+  image_compression_flutter
   screen_retriever_windows
   url_launcher_windows
   window_manager

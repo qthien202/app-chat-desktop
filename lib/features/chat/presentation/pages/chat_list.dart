@@ -1,6 +1,5 @@
 import 'package:app_chat_desktop/constants/app_data.dart';
 import 'package:app_chat_desktop/widgets/search_widet.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ChatList extends StatelessWidget {

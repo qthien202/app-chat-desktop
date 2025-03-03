@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'dart:html' as html;
+
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 
 class AppUtils {
   AppUtils._();
@@ -10,16 +12,27 @@ class AppUtils {
     return await file.readAsBytes();
   }
 
-  static Future<Uint8List?> readBlobUrl(String blobUrl) async {
-    try {
-      final response = await html.HttpRequest.request(
-        blobUrl,
-        responseType: "arraybuffer",
-      );
-      return Uint8List.fromList(response.response as List<int>);
-    } catch (e) {
-      print("Lỗi tải Blob: $e");
-      return null;
-    }
+  static Future<File> compressImage(File file) async {
+    Configuration config = Configuration(
+      outputType: ImageOutputType.jpg,
+      // useJpgPngNativeCompressor: false,
+      useJpgPngNativeCompressor: true,
+      quality: 80,
+    );
+
+    final param = ImageFileConfiguration(
+        input: ImageFile(
+            filePath: Uri.file(file.path).toFilePath(),
+            rawBytes: await file.readAsBytes()),
+        config: config);
+    final output = await compressor.compress(param);
+
+    return File(output.filePath);
+  }
+
+  static Future<Uint8List> compressImageWeb(Uint8List imageByte) async {
+    var imageCompress =
+        await FlutterImageCompress.compressWithList(imageByte, quality: 80);
+    return imageCompress;
   }
 }

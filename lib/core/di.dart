@@ -3,6 +3,7 @@ import 'package:app_chat_desktop/features/authentication/data/repositories/auth_
 import 'package:app_chat_desktop/features/authentication/domain/repositories/auth_repository.dart';
 import 'package:app_chat_desktop/features/authentication/domain/usecases/sign_in_with_google_usecase.dart';
 import 'package:app_chat_desktop/features/authentication/presentation/bloc/auth_bloc.dart';
+import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final GetIt sl = GetIt.instance;
@@ -14,4 +15,5 @@ void initializeDependencie() {
   sl.registerLazySingleton(() => SignInWithGoogleUseCase(sl<AuthRepository>()));
   sl.registerFactory(
       () => AuthBloc(signInWithGoogleUseCase: sl<SignInWithGoogleUseCase>()));
+  sl.registerLazySingleton<ChatBloc>(() => ChatBloc());
 }

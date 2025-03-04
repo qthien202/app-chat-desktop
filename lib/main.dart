@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => sl<AuthBloc>(),
         ),
-        BlocProvider(create: (context) => ChatBloc())
+        BlocProvider(create: (context) => sl<ChatBloc>())
       ],
       child: MaterialApp.router(
         scrollBehavior: const MaterialScrollBehavior().copyWith(

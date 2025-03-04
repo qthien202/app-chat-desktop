@@ -1,4 +1,7 @@
 import 'dart:io';
+import 'package:app_chat_desktop/core/di.dart';
+import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_bloc.dart';
+import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_event.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +67,7 @@ Widget contentFile(DropItem file) {
           ],
         ),
       ),
-      Icon(Icons.cancel)
+      cancelButton(file)
     ],
   );
 }
@@ -94,10 +97,19 @@ Widget imageDesktop(DropItem file) {
           fit: BoxFit.cover,
         ),
       ),
-      Icon(
-        Icons.cancel,
-        color: Colors.black,
-      )
+      cancelButton(file)
     ],
+  );
+}
+
+Widget cancelButton(DropItem file) {
+  return InkWell(
+    onTap: () {
+      sl<ChatBloc>().add(DeleteFileEvent(file));
+    },
+    child: Icon(
+      Icons.cancel,
+      color: Colors.black,
+    ),
   );
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_chat_desktop/constants/app_data.dart';
+import 'package:app_chat_desktop/core/di.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_event.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_state.dart';
@@ -36,16 +37,16 @@ class ChatWindow extends StatelessWidget {
 
               return DropTarget(
                 onDragEntered: (details) {
-                  context.read<ChatBloc>().add(ToggleDropFileEvent(true));
+                  sl<ChatBloc>().add(ToggleDropFileEvent(true));
                 },
                 enable: true,
                 onDragDone: (details) {
                   for (var file in details.files) {
-                    context.read<ChatBloc>().add(DropFileEvent(file));
+                    sl<ChatBloc>().add(DropFileEvent(file));
                   }
                 },
                 onDragExited: (details) {
-                  context.read<ChatBloc>().add(ToggleDropFileEvent(false));
+                  sl<ChatBloc>().add(ToggleDropFileEvent(false));
                 },
                 child: DottedBorder(
                   // padding: EdgeInsets.all(10),
@@ -65,7 +66,8 @@ class ChatWindow extends StatelessWidget {
                       ),
                       BlocBuilder<ChatBloc, ChatState>(
                         builder: (context, state) {
-                          if (state is DropFileSuccess) {
+                          if (state is DropFileSuccess &&
+                              state.files.isNotEmpty) {
                             print(">>>>>>>>>>>>>>data: ${state.files.length}");
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

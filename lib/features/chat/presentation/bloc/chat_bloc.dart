@@ -8,6 +8,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
   ChatBloc() : super(ChatInit()) {
     on<ToggleDropFileEvent>((event, emit) => toggleDropFile(event, emit));
     on<DropFileEvent>((event, emit) => dropFile(event, emit));
+    on<DeleteFileEvent>((event, emit) => deleteFile(event, emit));
   }
 
   toggleDropFile(ToggleDropFileEvent event, Emitter<ChatState> emit) {
@@ -18,5 +19,20 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     droppedFiles.add(event.file); // Luôn thêm file mới vào danh sách
 
     emit(DropFileSuccess(List.from(droppedFiles))); // Emit danh sách mới
+  }
+
+  void deleteFile(DeleteFileEvent event, Emitter<ChatState> emit) {
+    final currentState = state;
+    print(">>>>>>>>>droppedFile: ${droppedFiles.length}");
+    print(">>>>>>state: ${currentState.runtimeType}");
+
+    if (currentState is DropFileSuccess) {
+      // List<DropItem> updatedFiles = List.from(currentState.files);
+      final isDeleted = droppedFiles.remove(event.file);
+      print(">>>>>>>>>isDeleted: $isDeleted");
+      if (isDeleted) {
+        emit(DropFileSuccess(droppedFiles));
+      }
+    }
   }
 }

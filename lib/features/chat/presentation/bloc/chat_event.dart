@@ -13,3 +13,8 @@ class DropFileEvent extends ChatEvent {
   final DropItem file;
   DropFileEvent(this.file);
 }
+
+class DeleteFileEvent extends ChatEvent {
+  final DropItem file;
+  DeleteFileEvent(this.file);
+}

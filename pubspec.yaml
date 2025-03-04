@@ -63,6 +63,7 @@ dependencies:
   ffmpeg_kit_flutter_full_gpl: ^6.0.3
   uuid: ^4.5.1
   fc_native_video_thumbnail: ^0.17.2
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

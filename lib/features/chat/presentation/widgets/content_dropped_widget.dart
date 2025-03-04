@@ -14,10 +14,12 @@ Widget contentDroppedWidget(DropItem file) {
     future: fileBytesFuture,
     builder: (context, snapshot) {
       // print(">>>>>>>>>>>>uint8List: ${snapshot.data}");
-      if (kIsWeb &&
-          snapshot.hasData &&
-          FileTypeChecker.isImageByte(snapshot.data!)) {
-        return imageWeb(snapshot.data!);
+      if (kIsWeb) {
+        if (!FileTypeChecker.isImageByte(snapshot.data!)) {
+          return videoThumbnailWeb(file);
+        } else {
+          return imageWeb(snapshot.data!);
+        }
       }
 
       if (file.path.isNotEmpty && file.path.isImage) {
@@ -93,14 +95,14 @@ Widget imageDesktop(DropItem file) {
     alignment: Alignment.topRight,
     children: [
       ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Image.file(
-          height: 80,
-          width: 80,
-          File(file.path),
-          fit: BoxFit.cover,
-        ),
-      ),
+          borderRadius: BorderRadius.circular(8),
+          child: FadeInImage(
+            placeholder: AssetImage("assets/images/placeholder.png"),
+            image: FileImage(File(file.path)),
+            height: 80,
+            width: 80,
+            fit: BoxFit.cover,
+          )),
       cancelButton(file)
     ],
   );
@@ -132,10 +134,45 @@ Widget videoThumbnail(DropItem file) {
               child: Stack(
                 alignment: Alignment.center,
                 children: [
-                  Image.file(
+                  FadeInImage(
+                    placeholder: AssetImage("assets/images/placeholder.png"),
+                    image: FileImage(File(snapshot.data!)),
                     height: 80,
                     width: 80,
-                    File(snapshot.data!),
+                    fit: BoxFit.cover,
+                  ),
+                  Icon(Icons.play_arrow, color: Colors.white, size: 30)
+                ],
+              ),
+            ),
+            cancelButton(file)
+          ],
+        );
+      }
+      if (snapshot.hasError) return CircularProgressIndicator();
+      return Center();
+    },
+  );
+}
+
+Widget videoThumbnailWeb(DropItem file) {
+  return FutureBuilder<Uint8List?>(
+    future: AppUtils.getVideoThumbnailWeb(File(file.path)),
+    builder: (context, snapshot) {
+      print(">>>>>>>>thumbnailData: ${snapshot.data}");
+      if (snapshot.hasData) {
+        return Stack(
+          alignment: Alignment.topRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.memory(
+                    height: 80,
+                    width: 80,
+                    snapshot.data!,
                     fit: BoxFit.cover,
                   ),
                   Icon(Icons.play_arrow, color: Colors.white, size: 30)

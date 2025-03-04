@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   emoji_picker_flutter
+  fc_native_video_thumbnail
   file_selector_windows
   firebase_auth
   firebase_core

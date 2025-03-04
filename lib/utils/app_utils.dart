@@ -1,8 +1,15 @@
 import 'dart:io';
 import 'dart:typed_data';
-
+import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
+import 'package:ffmpeg_kit_flutter_full_gpl/ffmpeg_kit.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:get_thumbnail_video/index.dart';
+import 'package:get_thumbnail_video/video_thumbnail.dart';
 import 'package:image_compression_flutter/image_compression_flutter.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
+import 'package:uuid/v4.dart';
 
 class AppUtils {
   AppUtils._();
@@ -34,5 +41,26 @@ class AppUtils {
     var imageCompress =
         await FlutterImageCompress.compressWithList(imageByte, quality: 80);
     return imageCompress;
+  }
+
+  static Future<String?> getVideoThumbnail(File file) async {
+    final plugin = FcNativeVideoThumbnail();
+    try {
+      final tempDir = await getTemporaryDirectory();
+      String thumbnailName = const Uuid().v4();
+      String thumbnailPath = '${tempDir.path}/$thumbnailName.jpg';
+      final thumbnail = await plugin.getVideoThumbnail(
+          srcFile: file.path,
+          destFile: thumbnailPath,
+          width: 300,
+          height: 300,
+          format: 'jpeg',
+          quality: 90);
+      print(">>>>>>>thumbnailPath: $thumbnailPath");
+      return thumbnailPath;
+    } catch (e) {
+      print(">>>>>>>error: $e");
+    }
+    return null;
   }
 }

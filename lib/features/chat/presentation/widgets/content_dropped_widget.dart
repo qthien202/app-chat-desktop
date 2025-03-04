@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:app_chat_desktop/core/di.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_bloc.dart';
 import 'package:app_chat_desktop/features/chat/presentation/bloc/chat_event.dart';
+import 'package:app_chat_desktop/utils/app_utils.dart';
 import 'package:desktop_drop/desktop_drop.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ Widget contentDroppedWidget(DropItem file) {
 
       if (file.path.isNotEmpty && file.path.isImage) {
         return imageDesktop(file);
+      }
+      if (file.path.isNotEmpty && file.path.isVideo) {
+        return videoThumbnail(file);
       }
       return contentFile(file);
     },
@@ -111,5 +115,32 @@ Widget cancelButton(DropItem file) {
       Icons.cancel,
       color: Colors.black,
     ),
+  );
+}
+
+Widget videoThumbnail(DropItem file) {
+  return FutureBuilder<String?>(
+    future: AppUtils.getVideoThumbnail(File(file.path)),
+    builder: (context, snapshot) {
+      print(">>>>>>>>thumbnailData: ${snapshot.data}");
+      if (snapshot.hasData) {
+        return Stack(
+          alignment: Alignment.topRight,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.file(
+                height: 80,
+                width: 80,
+                File(snapshot.data!),
+                fit: BoxFit.cover,
+              ),
+            ),
+            cancelButton(file)
+          ],
+        );
+      }
+      return Center();
+    },
   );
 }

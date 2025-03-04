@@ -48,69 +48,60 @@ class ChatWindow extends StatelessWidget {
                 onDragExited: (details) {
                   sl<ChatBloc>().add(ToggleDropFileEvent(false));
                 },
-                child: DottedBorder(
-                  // padding: EdgeInsets.all(10),
-                  color: isDropping ? Colors.blue : Colors.transparent,
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(8),
-                  borderPadding: EdgeInsets.all(5),
-                  strokeWidth: 2,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Expanded(
-                        child: messagesWidget(context),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      BlocBuilder<ChatBloc, ChatState>(
-                        builder: (context, state) {
-                          if (state is DropFileSuccess &&
-                              state.files.isNotEmpty) {
-                            print(">>>>>>>>>>>>>>data: ${state.files.length}");
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Container(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Expanded(
+                      child: messagesWidget(context),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BlocBuilder<ChatBloc, ChatState>(
+                      builder: (context, state) {
+                        if (state is DropFileSuccess &&
+                            state.files.isNotEmpty) {
+                          print(">>>>>>>>>>>>>>data: ${state.files.length}");
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border(
+                                          bottom: BorderSide(
+                                              color: Colors.grey.shade200))),
+                                  child: SizedBox(
+                                    height: 100,
                                     width: double.infinity,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        border: Border(
-                                            bottom: BorderSide(
-                                                color: Colors.grey.shade200))),
-                                    child: SizedBox(
-                                      height: 100,
-                                      width: double.infinity,
-                                      child: ListView.separated(
-                                        physics:
-                                            AlwaysScrollableScrollPhysics(),
-                                        scrollDirection: Axis.horizontal,
-                                        separatorBuilder: (context, index) =>
-                                            const SizedBox(
-                                          width: 5,
-                                        ),
-                                        itemCount: state.files.length,
-                                        itemBuilder: (context, index) {
-                                          final file = state.files[index];
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5, vertical: 5),
-                                            child: contentDroppedWidget(file),
-                                          );
-                                        },
+                                    child: ListView.separated(
+                                      physics: AlwaysScrollableScrollPhysics(),
+                                      scrollDirection: Axis.horizontal,
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(
+                                        width: 5,
                                       ),
-                                    )),
-                                chatBottomAppBar(context)
-                              ],
-                            );
-                          }
-                          return chatBottomAppBar(context);
-                        },
-                      )
-                    ],
-                  ),
+                                      itemCount: state.files.length,
+                                      itemBuilder: (context, index) {
+                                        final file = state.files[index];
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5, vertical: 5),
+                                          child: contentDroppedWidget(file),
+                                        );
+                                      },
+                                    ),
+                                  )),
+                              chatBottomAppBar(context)
+                            ],
+                          );
+                        }
+                        return chatBottomAppBar(context);
+                      },
+                    )
+                  ],
                 ),
               );
             },

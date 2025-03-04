@@ -129,11 +129,17 @@ Widget videoThumbnail(DropItem file) {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.file(
-                height: 80,
-                width: 80,
-                File(snapshot.data!),
-                fit: BoxFit.cover,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.file(
+                    height: 80,
+                    width: 80,
+                    File(snapshot.data!),
+                    fit: BoxFit.cover,
+                  ),
+                  Icon(Icons.play_arrow, color: Colors.white, size: 30)
+                ],
               ),
             ),
             cancelButton(file)
